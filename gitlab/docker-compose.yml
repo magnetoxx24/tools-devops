@@ -1,0 +1,21 @@
+version: '2'
+services:
+        web:
+          image: 'gitlab/gitlab-ce:latest'
+          restart: always
+          hostname: 'gitlab_lab'
+          container_name: 'gitlab_lab'
+          environment:
+            GITLAB_OMNIBUS_CONFIG: |
+              external_url 'http://gitlab.laboratorio.com.do:8081'
+              gitlab_rails['gitlab_shell_ssh_port'] = 2422
+          ports:
+## both ports must match the port from external_url above
+            - '8081:8081'
+            - '443:443'
+# the mapped port must match ssh_port specified above.
+            - '2422:22'
+          volumes:
+            - '/srv/gitlab/config:/etc/gitlab'
+            - '/srv/gitlab/logs:/var/log/gitlab'
+            - '/srv/gitlab/data:/var/opt/gitlab'
